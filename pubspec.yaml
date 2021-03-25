@@ -28,18 +28,19 @@ dependencies:
   cloud_firestore: ^1.0.1
   cupertino_icons: ^1.0.2
   datetime_picker_formfield: ^1.0.0
-  equatable: ^1.2.6
+  equatable: ^2.0.0
   fdottedline: ^1.0.1
   firebase_auth: ^1.0.1
-  firebase_core: ^1.0.1
+  firebase_core: ^1.0.2
   firebase_storage: ^8.0.0
-  flutter_bloc: ^6.1.2
+  flutter_bloc: ^7.0.0
   get: ^3.25.4
   google_fonts: ^2.0.0
   google_sign_in: ^5.0.1
   image_picker: ^0.7.3
   progress_dialog: ^1.2.4
-  provider: ^4.3.3
+  provider: ^5.0.0
+  rxdart: ^0.26.0
 
 dev_dependencies:
   flutter_test:

@@ -12,4 +12,9 @@ class UsersCubit extends Cubit<UsersState> {
     Users user = await UsersServices.getUser(id);
     emit(UsersLoaded(user));
   }
+
+  Future<void> signOut() async {
+    await AuthServices.signOut();
+    emit(UsersLoaded(null));
+  }
 }

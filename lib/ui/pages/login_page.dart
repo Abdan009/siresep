@@ -10,7 +10,8 @@ class LoginPage extends StatelessWidget {
         child: Center(
           child: ListView(
             children: [
-              Text('Please login via google account', style: blackTextFont),
+              Text('Masuk dengan menggunakan akun Google',
+                  style: blackTextFont),
               SizedBox(
                 height: 10,
               ),

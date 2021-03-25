@@ -16,7 +16,7 @@ class WrapperUser extends StatelessWidget {
         : BlocBuilder<UsersCubit, UsersState>(
             builder: (_, adminState) {
               if (adminState is UsersLoaded) {
-                return HomePage();
+                return MainPage();
               } else {
                 return Scaffold(
                   body: Center(

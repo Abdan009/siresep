@@ -30,4 +30,12 @@ class UsersServices {
       return null;
     }
   }
+
+  static Users _getUserDoc(DocumentSnapshot document) {
+    return Users.fromSnapshot(document);
+  }
+
+  static Stream<Users> getUserDoc(String id) {
+    return _usersServices.doc(id).snapshots().map(_getUserDoc);
+  }
 }
