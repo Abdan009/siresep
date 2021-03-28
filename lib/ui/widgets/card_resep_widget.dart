@@ -1,16 +1,25 @@
 part of 'widgets.dart';
 
-class CardResepWidget extends StatelessWidget {
+class CardResepWidget extends StatefulWidget {
   final Resep resep;
   CardResepWidget(this.resep);
+
+  @override
+  _CardResepWidgetState createState() => _CardResepWidgetState();
+}
+
+class _CardResepWidgetState extends State<CardResepWidget> {
   @override
   Widget build(BuildContext context) {
+    bool isFaforite = false;
     return GestureDetector(
       onTap: () {
-        Get.to(DetailResepPage(resep));
+        Get.to(
+          () => DetailResepPage(widget.resep),
+        );
       },
       child: Container(
-        height: Get.height / 3,
+        height: (Get.height / 3) + 20,
         margin: EdgeInsets.symmetric(vertical: 2.5, horizontal: defaultMargin),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -21,11 +30,8 @@ class CardResepWidget extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 image: DecorationImage(
-                    image: NetworkImage(resep.photo), fit: BoxFit.cover),
+                    image: NetworkImage(widget.resep.photo), fit: BoxFit.cover),
               ),
-            ),
-            SizedBox(
-              height: 5,
             ),
             BlocBuilder<UsersCubit, UsersState>(
               builder: (_, userState) => Container(
@@ -38,7 +44,7 @@ class CardResepWidget extends StatelessWidget {
                           Expanded(
                             child: Container(
                               child: Text(
-                                resep.title,
+                                widget.resep.title,
                                 style: blackTextFont.copyWith(
                                     fontWeight: FontWeight.bold, fontSize: 18),
                                 maxLines: 2,
@@ -46,36 +52,49 @@ class CardResepWidget extends StatelessWidget {
                               ),
                             ),
                           ),
-                          (!resep.isFavorite)
+                          (!isFaforite)
                               ? IconButton(
                                   icon: Icon(Icons.favorite,
-                                      color: (resep.isFavorite)
+                                      color: (widget.resep.isFavorite)
                                           ? Colors.red
                                           : accentColor2),
                                   onPressed: () async {
-                                    if (!resep.isFavorite) {
+                                    if (!widget.resep.isFavorite) {
                                       Favorite favorite = Favorite(
                                           idUser: (userState as UsersLoaded)
                                               .user
                                               .id
                                               .toString(),
-                                          idResep: resep.id);
+                                          idResep: widget.resep.id);
                                       await FavoriteServices.updateFavorite(
                                           favorite);
                                     } else {
                                       await FavoriteServices.deleteFavorite(
-                                          resep.id);
+                                          (userState as UsersLoaded)
+                                              .user
+                                              .id
+                                              .toString(),
+                                          widget.resep.id);
                                     }
                                   },
                                 )
-                              : loading(1),
+                              : SizedBox(
+                                  height: 30,
+                                  width: 30,
+                                  child: loading(2),
+                                ),
                         ],
                       ),
                     ),
-                    Text("Dibuat Oleh : " + resep.user.name,
+                    Text("Dibuat Oleh : " + widget.resep.user.name,
                         style: blackTextFont),
-                    Text("Rilis : " + resep.timecreate.dateAndTimeNumber,
+                    Text(
+                        "Upload : " + widget.resep.timecreate.dateAndTimeNumber,
                         style: blackTextFont),
+                    Divider(
+                      height: 20,
+                      thickness: 2,
+                    )
                   ],
                 ),
               ),

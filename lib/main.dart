@@ -18,7 +18,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [BlocProvider(create: (_) => UsersCubit())],
+      providers: [
+        BlocProvider(
+          create: (_) => UsersCubit(),
+        )
+      ],
       child: StreamProvider.value(
         value: AuthServices.userStream,
         initialData: null,

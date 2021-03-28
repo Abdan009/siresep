@@ -14,6 +14,14 @@ class ResepServices {
         .toList();
   }
 
+  static Resep _getResepDoc(DocumentSnapshot document) {
+    return Resep.fromSnapshot(document);
+  }
+
+  static Stream<Resep> getResepDoc(String id) {
+    return _resepServices.doc(id).snapshots().map(_getResepDoc);
+  }
+
   static Stream<List<Resep>> getMyResepColl(String idUser) {
     return _resepServices
         .where('idUser', isEqualTo: idUser)
@@ -31,48 +39,74 @@ class ResepServices {
 
   //----------------------------------------------------
 
-  static Stream<List<Resep>> getMyResepCollFavorite(String idUser) {
+  static Stream<Resep> getResepDocRx(String idResep, String idUser) {
     return Rx.combineLatest3(
-        getMyResepColl(idUser),
-        FavoriteServices.getMyFavoriteColl(idUser),
-        UsersServices.getUserDoc(idUser),
-        (List<Resep> listResep, List<Favorite> listFavorite, Users user) {
-      return listResep.map((resep) {
-        Favorite favorite = listFavorite
-            .firstWhere((element) => element.idResep == resep.id, orElse: null);
+      getResepDoc(idResep),
+      FavoriteServices.getMyFavoriteColl(idUser),
+      UsersServices.getUserDoc(idUser),
+      (Resep resep, List<Favorite> listFavorite, Users user) {
         return resep.copyWith(
-            isFavorite: (favorite != null) ? true : false, user: user);
-      }).toList();
-    });
+            isFavorite:
+                listFavorite.any((element) => element.idResep == resep.id),
+            user: user);
+      },
+    );
   }
 
-  static Stream<List<Resep>> getResepCollFavorite(String idUser) {
+  static Stream<List<Resep>> getMyResepCollCom(String idUser) {
     return Rx.combineLatest3(
-        getResepColl(),
-        FavoriteServices.getMyFavoriteColl(idUser),
-        UsersServices.getUserDoc(idUser),
-        (List<Resep> listResep, List<Favorite> listFavorite, Users user) {
-      return listResep.map((resep) {
-        Favorite favorite = listFavorite
-            .firstWhere((element) => element.idResep == resep.id, orElse: null);
-        return resep.copyWith(
-            isFavorite: (favorite != null) ? true : false, user: user);
-      }).toList();
-    });
+      getMyResepColl(idUser),
+      FavoriteServices.getMyFavoriteColl(idUser),
+      UsersServices.getUserDoc(idUser),
+      (List<Resep> listResep, List<Favorite> listFavorite, Users user) {
+        return listResep.map(
+          (resep) {
+            return resep.copyWith(
+                isFavorite:
+                    listFavorite.any((element) => element.idResep == resep.id),
+                user: user);
+          },
+        ).toList();
+      },
+    );
+  }
+
+  static Stream<List<Resep>> getResepCollCom(String idUser) {
+    return Rx.combineLatest3(
+      getResepColl(),
+      FavoriteServices.getMyFavoriteColl(idUser),
+      UsersServices.getUserDoc(idUser),
+      (List<Resep> listResep, List<Favorite> listFavorite, Users user) {
+        return listResep.map(
+          (resep) {
+            return resep.copyWith(
+                isFavorite:
+                    listFavorite.any((element) => element.idResep == resep.id),
+                user: user);
+          },
+        ).toList();
+      },
+    );
   }
 
   static Stream<List<Resep>> getMyResepFavorite(String idUser) {
     return Rx.combineLatest3(
-        getResepColl(),
-        FavoriteServices.getMyFavoriteColl(idUser),
-        UsersServices.getUserDoc(idUser),
-        (List<Resep> listResep, List<Favorite> listFavorite, Users user) {
-      return listFavorite.map((favorite) {
-        Resep resep = listResep.firstWhere(
-            (element) => element.id == favorite.idResep,
-            orElse: null);
-        return resep.copyWith(user: user);
-      }).toList();
-    });
+      getResepColl(),
+      FavoriteServices.getMyFavoriteColl(idUser),
+      UsersServices.getUserDoc(idUser),
+      (List<Resep> listResep, List<Favorite> listFavorite, Users user) {
+        return listFavorite.map(
+          (favorite) {
+            Resep resep;
+            if (listFavorite.isNotEmpty) {
+              resep = listResep.firstWhere(
+                  (element) => element.id == favorite.idResep,
+                  orElse: null);
+            }
+            return resep.copyWith(user: user, isFavorite: true);
+          },
+        ).toList();
+      },
+    );
   }
 }

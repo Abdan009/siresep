@@ -28,8 +28,9 @@ class LoginPage extends StatelessWidget {
                   padding: EdgeInsets.all(10),
                   width: 200,
                   decoration: BoxDecoration(
-                      border: Border.all(),
-                      borderRadius: BorderRadius.circular(10)),
+                    border: Border.all(),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   child: Row(
                     //crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -45,7 +46,7 @@ class LoginPage extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Login Now',
+                        'Masuk Sekarang',
                         style:
                             blackTextFont.copyWith(fontWeight: FontWeight.bold),
                       ),

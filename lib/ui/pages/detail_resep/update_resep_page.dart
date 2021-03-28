@@ -27,26 +27,6 @@ class _UpdateResepPageState extends State<UpdateResepPage> {
     return Scaffold(
       appBar: appBar(
         (widget.resep == null) ? 'Tambah Resep' : 'Edit Resep',
-        actions: [
-          if (widget.resep != null)
-            Center(
-              child: GestureDetector(
-                onTap: () {
-                  // RsServices().deleteRs(widget.rs.id).then((value) {
-                  //   Get.back(result: true);
-                  // });
-                },
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: defaultMargin),
-                  child: Text(
-                    'Hapus',
-                    style: blackTextFont.copyWith(
-                        color: Colors.red, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-            )
-        ],
       ),
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: defaultMargin),
@@ -82,35 +62,36 @@ class _UpdateResepPageState extends State<UpdateResepPage> {
                   width: 190,
                   height: 43,
                   child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(51),
-                          ),
-                          primary: mainColor,
-                          elevation: 0),
-                      child: Text(
-                        (widget.resep == null) ? "Tambahkan" : "Edit",
-                        style:
-                            whiteTextFont.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      onPressed: () async {
-                        bool isNextValidasi = false;
-                        if (widget.resep == null) {
-                          if (imageFileUpload == null) {
-                            flushbar('Harap tambahkan foto hasil dari resep',
-                                context);
-                          } else {
-                            isNextValidasi = true;
-                          }
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(51),
+                        ),
+                        primary: mainColor,
+                        elevation: 0),
+                    child: Text(
+                      (widget.resep == null) ? "Tambahkan" : "Edit",
+                      style:
+                          whiteTextFont.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () async {
+                      bool isNextValidasi = false;
+                      if (widget.resep == null) {
+                        if (imageFileUpload == null) {
+                          flushbar(
+                              'Harap tambahkan foto hasil dari resep', context);
                         } else {
                           isNextValidasi = true;
                         }
+                      } else {
+                        isNextValidasi = true;
+                      }
 
-                        (isNextValidasi)
-                            ? await nextValidasi(
-                                (userState as UsersLoaded).user.id)
-                            : print("ERROR- update pasar");
-                      }),
+                      (isNextValidasi)
+                          ? await nextValidasi(
+                              (userState as UsersLoaded).user.id)
+                          : print("ERROR- update pasar");
+                    },
+                  ),
                 ),
               ),
             ),

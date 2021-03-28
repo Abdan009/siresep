@@ -7,17 +7,18 @@ class MyFavoritePage extends StatelessWidget {
       appBar: appBar('Resep Favorit'),
       body: Container(
         child: BlocBuilder<UsersCubit, UsersState>(
-          builder: (_, userState) => StreamBuilder<List<Resep>>(
+          builder: (_, userState) => StreamBuilder(
             stream: ResepServices.getMyResepFavorite(
                 (userState as UsersLoaded).user.id),
             builder: (_, snapshot) {
               if (snapshot.hasData) {
                 List<Resep> listResep = snapshot.data ?? [];
-                return (listResep.isEmpty)
+                return (listResep.isNotEmpty)
                     ? ListView.builder(
                         itemCount: listResep.length,
                         itemBuilder: (_, index) =>
-                            CardResepWidget(listResep[index]))
+                            CardResepWidget(listResep[index]),
+                      )
                     : Center(
                         child: Text(
                           'Tidak terdapat resep',
